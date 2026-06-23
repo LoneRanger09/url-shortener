@@ -5,10 +5,6 @@ const db = initializeFirebase();
 // Collection reference for Users in Firestore
 const Users = db.collection('users');
 
-/**
- * Helper to validate user data structure before saving to Firestore
- * (Since Firestore is schema-less, we validate documents in application logic)
- */
 const validateUser = (user) => {
     const errors = [];
     if (!user.name) errors.push("Name is required");

@@ -2,12 +2,8 @@
 const initializeFirebase = require('../config/firebase');
 const db = initializeFirebase();
 
-// Collection reference for URLs in Firestore
 const Urls = db.collection('urls');
 
-/**
- * Helper to validate URL data structure before saving to Firestore
- */
 const validateUrl = (url) => {
     const errors = [];
     if (!url.urlCode) errors.push("urlCode is required");
