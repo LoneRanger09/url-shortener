@@ -32,12 +32,19 @@ const shortenUrl = async (req, res) => {
       
     const shortUrl = `${process.env.BASE_URL}/${urlCode}`;
 
-        url = await Url.create({
+        const newUrlData = {
       longUrl,
       shortUrl,
       urlCode,
-    });
-     res.status(201).json({ success: true, data: url });
+    };
+    
+    if (req.user) {
+     newUrlData.user = req.user.id;
+    }
+      
+      url = await Url.create(newUrlData);
+     
+      res.status(201).json({ success: true, data: url });
   } catch (err) {
     
     console.error('Database error:', err); // Log the actual error for debugging.

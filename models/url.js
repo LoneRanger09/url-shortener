@@ -1,4 +1,5 @@
 // models/url.js
+const firebase = require('../config/firebase');
 const initializeFirebase = require('../config/firebase');
 const db = initializeFirebase();
 
@@ -13,7 +14,8 @@ const validateUrl = (url) => {
         isValid: errors.length === 0,
         errors
     };
-};
+   
+}
 
 module.exports = {
     Urls,
