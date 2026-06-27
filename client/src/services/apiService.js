@@ -13,12 +13,7 @@ import axios from 'axios';
 export const createShortUrl = async (longUrl) => {
   // 2. Use a try...catch block to handle potential network errors gracefully.
   try {
-    // 3. Make the asynchronous POST request using axios.
-    //    - The first argument is the URL of the API endpoint. We use a relative path
-    //      because our Vite proxy will automatically forward this request to our
-    //      backend server (http://localhost:5000/api/shorten).
-    //    - The second argument is the request body (the payload). Our backend
-    //      expects an object with a 'longUrl' property.
+
     const response = await axios.post('/api/shorten', { longUrl });
 
     // 4. If the request is successful, axios wraps the response in a 'data' object.

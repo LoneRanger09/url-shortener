@@ -23,6 +23,7 @@ app.use('/api/auth', authRoutes);
 const linksRoutes = require('./routes/links');
 app.use('/api/links', linksRoutes);
 
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
