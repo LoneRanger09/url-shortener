@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
     
-      res.status(201).json({
+      return res.status(201).json({
       success: true,
       data: {
         _id: newUser._id,
@@ -48,7 +48,7 @@ const registerUser = async (req, res) => {
   } catch (err) {
     // Handle any other server-side errors
     console.error('Registration Error:', err);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
 /**
@@ -75,14 +75,14 @@ const loginUser = async (req, res) => {
      const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1h', // The token will be valid for 1 hour.
     });
- res.status(200).json({
+ return res.status(200).json({
       success: true,
       token: token,
-    });;
+    });
 
   } catch (err) {
     console.error('Login Error:', err);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
 

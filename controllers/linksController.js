@@ -12,7 +12,7 @@ const getMyLinks = async (req, res) => {
     }
 
     const links = await Url.find({ user: req.user.id }).sort({ date: -1 });
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: links.length,
       data: links,
@@ -20,7 +20,7 @@ const getMyLinks = async (req, res) => {
 
   } catch (err) {
     console.error('Error fetching user links:', err);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
 module.exports = {

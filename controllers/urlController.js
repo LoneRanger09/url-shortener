@@ -44,17 +44,13 @@ const shortenUrl = async (req, res) => {
       
       url = await Url.create(newUrlData);
      
-      res.status(201).json({ success: true, data: url });
+      return res.status(201).json({ success: true, data: url });
   } catch (err) {
     
     console.error('Database error:', err); // Log the actual error for debugging.
     
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
-
-
-
-  res.status(200).json({ success: true, message: 'Controller is now connected!', data: { receivedUrl: longUrl } });
 
 };
 
@@ -82,7 +78,7 @@ const redirectToUrl = async (req, res) => {
    
     console.error('Server error on redirect:', err); // Log the error for debugging.
    
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    return res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
 

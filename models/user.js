@@ -1,34 +1,53 @@
 // models/user.js
 const initializeFirebase = require('../config/firebase');
 const db = initializeFirebase();
-
-// Collection reference for Users in Firestore
 const Users = db.collection('users');
 
-const validateUser = (user) => {
-    const errors = [];
-    if (!user.name) errors.push("Name is required");
+const User = {
+  findOne: (query) => {
+    const key = Object.keys(query)[0];
+    const val = query[key];
     
-    if (!user.email) {
-        errors.push("Email is required");
-    } else {
-        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (!emailRegex.test(user.email)) {
-            errors.push("Please provide a valid email address");
-        }
-    }
+    const promise = (async () => {
+      try {
+        const snapshot = await Users.where(key, '==', val).limit(1).get();
+        if (snapshot.empty) return null;
+        const doc = snapshot.docs[0];
+        return {
+          id: doc.id,
+          _id: doc.id,
+          ...doc.data()
+        };
+      } catch (err) {
+        console.error("Firestore User findOne error:", err);
+        throw err;
+      }
+    })();
     
-    if (!user.password || user.password.length < 6) {
-        errors.push("Password must be at least 6 characters long");
-    }
-    
-    return {
-        isValid: errors.length === 0,
-        errors
+    promise.select = (selectFields) => {
+      return promise;
     };
+    
+    return promise;
+  },
+
+  create: async (data) => {
+    try {
+      const docRef = await Users.add({
+        ...data,
+        date: new Date().toISOString()
+      });
+      const doc = await docRef.get();
+      return {
+        id: doc.id,
+        _id: doc.id,
+        ...doc.data()
+      };
+    } catch (err) {
+      console.error("Firestore User create error:", err);
+      throw err;
+    }
+  }
 };
 
-module.exports = {
-    Users,
-    validateUser
-};
+module.exports = User;
