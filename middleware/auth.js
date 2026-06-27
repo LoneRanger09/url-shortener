@@ -15,4 +15,4 @@ const auth = (req,res,next)=>{
      res.status(401).json({ success: false, error: 'Token is not valid' });
   }
 };
-module.export = auth;
+module.exports = auth;
