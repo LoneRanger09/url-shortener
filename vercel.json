@@ -20,27 +20,31 @@
     },
     {
       "src": "/assets/(.*)",
-      "dest": "client/dist/assets/$1"
+      "dest": "/assets/$1"
     },
     {
       "src": "/vite.svg",
-      "dest": "client/dist/vite.svg"
+      "dest": "/vite.svg"
+    },
+    {
+      "src": "/favicon.png",
+      "dest": "/favicon.png"
     },
     {
       "src": "/login",
-      "dest": "client/dist/index.html"
+      "dest": "/index.html"
     },
     {
       "src": "/register",
-      "dest": "client/dist/index.html"
+      "dest": "/index.html"
     },
     {
       "src": "/dashboard",
-      "dest": "client/dist/index.html"
+      "dest": "/index.html"
     },
     {
       "src": "/",
-      "dest": "client/dist/index.html"
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
