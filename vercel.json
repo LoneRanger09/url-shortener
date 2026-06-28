@@ -4,13 +4,6 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "client"
-      }
     }
   ],
   "routes": [
@@ -22,5 +15,6 @@
       "src": "/(.*)",
       "dest": "client/dist/$1"
     }
-  ]
+  ],
+  "outputDirectory": "client/dist"
 }
