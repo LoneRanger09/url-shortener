@@ -11,9 +11,6 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
-  },
-  // Add this for production
-  define: {
-    'import.meta.env.VITE_API_BASE_URL': JSON.stringify('/api')
   }
 })
+
