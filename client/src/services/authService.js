@@ -8,6 +8,33 @@ import axios from 'axios';
 const API_URL = '/api/auth/';
 
 /**
+ * Helper to inspect and parse API errors. Logs detailed info to the browser developer console.
+ */
+const handleApiError = (error, defaultMsg) => {
+  console.error("🔍 Auth Request Failed:", {
+    url: error.config?.url,
+    method: error.config?.method,
+    status: error.response?.status,
+    statusText: error.response?.statusText,
+    responseData: error.response?.data,
+  });
+
+  if (error.response) {
+    const data = error.response.data;
+    if (data && typeof data === 'object') {
+      return data;
+    }
+    if (typeof data === 'string') {
+      if (data.startsWith('<!DOCTYPE html>')) {
+        return { error: `Server Error (${error.response.status}): ${error.response.statusText || 'Internal Error'}` };
+      }
+      return { error: data };
+    }
+  }
+  return { error: error.message || defaultMsg };
+};
+
+/**
  * @desc    Registers a new user by sending their data to the backend.
  * @param   {object} userData An object containing { name, email, password }.
  * @returns {Promise<object>} A promise that resolves to the data returned from the API.
@@ -27,15 +54,7 @@ export const registerUser = async (userData) => {
     return response.data;
 
   } catch (error) {
-    // 5. If an error occurs, log it and re-throw a structured error.
-    console.error('API Error: User registration failed', error);
-    
-    // Re-throw the specific error message from the backend if available.
-    if (error.response && error.response.data) {
-      throw error.response.data;
-    } else {
-      throw new Error('An unexpected error occurred during registration.');
-    }
+    throw handleApiError(error, 'An unexpected error occurred during registration.');
   }
 };
 
@@ -56,12 +75,6 @@ export const loginUser = async (credentials) => {
     return response.data;
 
   } catch (error) {
-    console.error('API Error: User login failed', error);
-
-    if (error.response && error.response.data) {
-      throw error.response.data;
-    } else {
-      throw new Error('An unexpected error occurred during login.');
-    }
+    throw handleApiError(error, 'An unexpected error occurred during login.');
   }
-};
+};

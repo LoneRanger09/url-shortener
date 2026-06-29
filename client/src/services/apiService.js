@@ -4,6 +4,33 @@
 import axios from 'axios';
 
 /**
+ * Helper to inspect and parse API errors. Logs detailed info to the browser developer console.
+ */
+const handleApiError = (error, defaultMsg) => {
+  console.error("🔍 API Request Failed:", {
+    url: error.config?.url,
+    method: error.config?.method,
+    status: error.response?.status,
+    statusText: error.response?.statusText,
+    responseData: error.response?.data,
+  });
+
+  if (error.response) {
+    const data = error.response.data;
+    if (data && typeof data === 'object') {
+      return data;
+    }
+    if (typeof data === 'string') {
+      if (data.startsWith('<!DOCTYPE html>')) {
+        return { error: `Server Error (${error.response.status}): ${error.response.statusText || 'Internal Error'}` };
+      }
+      return { error: data };
+    }
+  }
+  return { error: error.message || defaultMsg };
+};
+
+/**
  * @desc    Sends a long URL to the backend API to be shortened.
  * @param   {string} longUrl The URL that the user wants to shorten.
  * @returns {Promise<object>} A promise that resolves to the data returned from the API.
@@ -13,25 +40,23 @@ import axios from 'axios';
 export const createShortUrl = async (longUrl) => {
   // 2. Use a try...catch block to handle potential network errors gracefully.
   try {
+    const token = localStorage.getItem('token');
+    const config = {};
+    if (token) {
+      config.headers = {
+        'x-auth-token': token
+      };
+    }
 
-    const response = await axios.post('/api/shorten', { longUrl });
+    const response = await axios.post('/api/shorten', { longUrl }, config);
 
     // 4. If the request is successful, axios wraps the response in a 'data' object.
     //    We return this data so the component that called this function can use it.
     return response.data;
 
   } catch (error) {
-    // 5. If the request fails, axios throws an error.
-    console.error('API Error: Failed to create short URL', error);
-
-    // We check if the error object has a 'response' and 'data' property.
-    // This is where axios places the error response sent from our backend.
-    // Re-throwing this allows our component to catch a more specific error message.
-    if (error.response && error.response.data) {
-      throw error.response.data;
-    } else {
-      // If it's a network error or something else, throw a generic error.
-      throw new Error('An unexpected error occurred. Please try again.');
-    }
+    // 5. Throw parsed and logged error
+    throw handleApiError(error, 'An unexpected error occurred. Please try again.');
   }
 };
+
