@@ -4,10 +4,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
+import axios from 'axios';
 
-// --- CHANGE 1: Import the AuthProvider ---\
+// Configure Axios base URL globally for separate frontend/backend deployments
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || '';
+
+// --- CHANGE 1: Import the AuthProvider ---
 // This gives us access to the provider component we just created.
 import { AuthProvider } from './context/AuthContext.jsx';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

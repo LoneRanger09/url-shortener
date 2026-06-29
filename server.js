@@ -7,12 +7,15 @@ const app = express();
 const OriginalDate = global.Date;
 
 const setupApp = () => {
+  const cors = require('cors');
   const initializeFirebase = require('./config/firebase');
   const urlRoutes = require('./routes/urls');
   const errorHandler = require('./middleware/errorMiddleware');
 
+  app.use(cors());
   app.use(express.json());
   app.use('/api', urlRoutes);
+
 
   initializeFirebase();
 
