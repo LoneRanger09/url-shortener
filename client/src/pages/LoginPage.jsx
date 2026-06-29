@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/authService';
 import Spinner from '../components/Spinner';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -35,8 +37,8 @@ const LoginPage = () => {
       const response = await loginUser(formData);
       
       if (response.token) {
-        localStorage.setItem('token', response.token);
-        console.log('Token stored in localStorage successfully!');
+        login(response.token);
+        console.log('User authenticated successfully in Context!');
         navigate('/dashboard');
       } else {
         setError('Login successful, but no token was provided.');
@@ -49,6 +51,7 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-6 py-12">
