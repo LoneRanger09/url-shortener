@@ -19,11 +19,19 @@ const shortenUrl = async (req, res) => {
      if (!longUrl) {
     return res.status(400).json({ success: false, error: 'Please provide a URL' });
   }
-   if (!validUrl.isUri(longUrl)) {
+
+  let normalizedUrl = longUrl.trim();
+  if (/^\/\//.test(normalizedUrl)) {
+    normalizedUrl = 'http:' + normalizedUrl;
+  } else if (!/^[a-zA-Z]+:\/\//.test(normalizedUrl)) {
+    normalizedUrl = 'http://' + normalizedUrl;
+  }
+
+   if (!validUrl.isUri(normalizedUrl)) {
     return res.status(400).json({ success: false, error: 'Invalid URL format provided' });
   }
   try{
-     let url = await Url.findOne({ longUrl: longUrl });
+     let url = await Url.findOne({ longUrl: normalizedUrl });
      if (url) {
       return res.status(200).json({ success: true, data: url });
       }
@@ -33,7 +41,7 @@ const shortenUrl = async (req, res) => {
     const shortUrl = `${process.env.BASE_URL}/${urlCode}`;
 
         const newUrlData = {
-      longUrl,
+      longUrl: normalizedUrl,
       shortUrl,
       urlCode,
     };

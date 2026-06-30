@@ -77,7 +77,7 @@ const HomePage = () => {
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
           <div className="flex-grow">
             <input
-              type="url"
+              type="text"
               placeholder="PASTE_LONG_URL..."
               value={longUrl}
               onChange={(e) => setLongUrl(e.target.value)}
