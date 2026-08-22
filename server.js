@@ -15,6 +15,7 @@ const setupApp = () => {
   app.use(cors());
   app.use(express.json());
   app.use('/api', urlRoutes);
+  app.use('/', urlRoutes);
 
 
   initializeFirebase();
@@ -28,9 +29,11 @@ const setupApp = () => {
 
   const authRoutes = require('./routes/auth');
   app.use('/api/auth', authRoutes);
+  app.use('/auth', authRoutes);
 
   const linksRoutes = require('./routes/links');
   app.use('/api/links', linksRoutes);
+  app.use('/links', linksRoutes);
 
   app.use(errorHandler);
 
